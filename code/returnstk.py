@@ -34,7 +34,6 @@ def main():
     time.sleep(0.5)
     searchBar = driver.find_element(by="id", value="yfin-usr-qry")
     marketStatus = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[4]/div/div/div/div[1]/div/div/span")
-    status = marketStatus.text.split(" ")
     print(f"[LOG]: {marketStatus.text} > {dt.now().strftime('%H-%M-%S')}")
     print(f"[LOG]: searching ticker > {dt.now().strftime('%H-%M-%S')}")
     simType(searchBar, tickerName)
