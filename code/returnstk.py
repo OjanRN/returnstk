@@ -34,11 +34,6 @@ def main():
     marketStatus = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[4]/div/div/div/div[1]/div/div/span")
     status = marketStatus.text.split(" ")
     print(f"[LOG]: {marketStatus.text} > {dt.now().strftime('%H-%M-%S')}")
-    if status[2] == "closed":
-        print("Exiting...")
-        exit()
-    else:
-        pass
     print(f"[LOG]: searching ticker > {dt.now().strftime('%H-%M-%S')}")
     simType(searchBar, tickerName)
     time.sleep(1)
@@ -47,17 +42,18 @@ def main():
     print(f"[LOG]: getting price information > {dt.now().strftime('%H-%M-%S')}")
     company = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[2]/div[1]/div[1]/h1")
     print(f"[LOG]: showing information for: {company.text}")
-    time.sleep(0.5)
+    time.sleep(2)
     try:
         blockmsg = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[4]/div/div/div[1]/div/div/div/div/div/section/button[1]")
         blockmsg.click()
     except:
         pass
     time.sleep(1)
+    print("")
     while True:
-        currentPrc = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[3]/div[1]/div[1]/fin-streamer[1]")
-        print(f"Current price: {currentPrc.text}")
-        time.sleep(1.75)
+        currentPrc = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[3]/div[1]/div/fin-streamer[1]")
+        print(f"Current Price:{currentPrc.text}", end="\r")
+        time.sleep(0.25)
 
 
 print(main())
