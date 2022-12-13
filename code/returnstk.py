@@ -33,7 +33,7 @@ def main():
     searchBar = driver.find_element(by="id", value="yfin-usr-qry")
     marketStatus = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[4]/div/div/div/div[1]/div/div/span")
     status = marketStatus.text.split(" ")
-    print(f"[LOG]: market status: {status[2]} > {dt.now().strftime('%H-%M-%S')}")
+    print(f"[LOG]: {marketStatus.text} > {dt.now().strftime('%H-%M-%S')}")
     if status[2] == "closed":
         print("Exiting...")
         exit()
