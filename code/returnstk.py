@@ -1,7 +1,6 @@
 # returnstk is a software coded by OjanRN
 # github.com/ojanrn
 
-
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from datetime import datetime as dt
@@ -38,11 +37,19 @@ def main():
     print(f"[LOG]: accessing stock page>{dt.now().strftime('%H-%M-%S')}")
     driver.find_element(by="id", value="result-quotes-0").click()
     print(f"[LOG]: getting price information>{dt.now().strftime('%H-%M-%S')}")
-    time.sleep(3)
+    company = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[2]/div[1]/div[1]/h1")
+    print(f"[LOG]: showing information for: {company.text}")
+    time.sleep(1)
+    try:
+        blockmsg = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[4]/div/div/div[1]/div/div/div/div/div/section/button[1]")
+        blockmsg.click()
+    except:
+        pass
+    time.sleep(1)
     while True:
-        currentPrc = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[3]/div[1]/div/fin-streamer[1]/span")
+        currentPrc = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[3]/div[1]/div[1]/fin-streamer[1]")
         print(f"Current price: {currentPrc.text}")
-        time.sleep(1)
+        time.sleep(1.5)
 
 
 print(main())
