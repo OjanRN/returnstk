@@ -29,17 +29,17 @@ def simType(element,text):
 def main():
     tickerName = input("Ticker Symbol? ")
     driver = get_driver()
-    time.sleep(3)
+    time.sleep(0.5)
     searchBar = driver.find_element(by="id", value="yfin-usr-qry")
     print(f"[LOG]: searching ticker>{dt.now().strftime('%H-%M-%S')}")
     simType(searchBar, tickerName)
-    time.sleep(0.5)
+    time.sleep(1)
     print(f"[LOG]: accessing stock page>{dt.now().strftime('%H-%M-%S')}")
     driver.find_element(by="id", value="result-quotes-0").click()
     print(f"[LOG]: getting price information>{dt.now().strftime('%H-%M-%S')}")
     company = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[2]/div[1]/div[1]/h1")
     print(f"[LOG]: showing information for: {company.text}")
-    time.sleep(1)
+    time.sleep(0.5)
     try:
         blockmsg = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[4]/div/div/div[1]/div/div/div/div/div/section/button[1]")
         blockmsg.click()
@@ -49,7 +49,7 @@ def main():
     while True:
         currentPrc = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[3]/div[1]/div[1]/fin-streamer[1]")
         print(f"Current price: {currentPrc.text}")
-        time.sleep(1.5)
+        time.sleep(1.75)
 
 
 print(main())
