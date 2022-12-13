@@ -1,3 +1,4 @@
+
 # Return Stk(Stock)
 
 A real time stock scraper coded in Python and Nuitka
@@ -26,5 +27,5 @@ A real time stock scraper coded in Python and Nuitka
 
 **Library:** Selenium, Nuitka, Datetime
 
-**Source:** [Yahoo Finance]("https://finance.yahoo.com")
+**Source:** [Yahoo Finance](https://finance.yahoo.com)
 
