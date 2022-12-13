@@ -15,6 +15,7 @@ def get_driver():
     options.add_argument("start-maximized")
     options.add_argument("disable-infobars")
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
     options.add_argument("disable-blink-features=AutomationControlled")
 
     driver = webdriver.Chrome(options=options)
@@ -28,6 +29,7 @@ def simType(element,text):
 
 def main():
     tickerName = input("Ticker Symbol? ")
+    print("")
     driver = get_driver()
     time.sleep(0.5)
     searchBar = driver.find_element(by="id", value="yfin-usr-qry")
@@ -52,7 +54,7 @@ def main():
     print("")
     while True:
         currentPrc = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[3]/div[1]/div/fin-streamer[1]")
-        print(f"Current Price:{currentPrc.text}", end="\r")
+        print(f">Current Price:{currentPrc.text}", end="\r")
         time.sleep(0.25)
 
 
