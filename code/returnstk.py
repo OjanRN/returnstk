@@ -5,6 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from datetime import datetime as dt
 import time
+import keyboard
 import sys
 
 def get_driver():
@@ -80,21 +81,19 @@ def main():
     print("")
     if int(returnIter) == 0:
         while True:
-            try:
-                currentPrc = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[3]/div[1]/div/fin-streamer[1]")
-                print(f">Current Price:{currentPrc.text}", end="\r")
-                time.sleep(0.50)
-            except KeyboardInterrupt:
+            currentPrc = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[3]/div[1]/div/fin-streamer[1]")
+            print(f">Current Price:{currentPrc.text}", end="\r")
+            time.sleep(0.50)
+            if keyboard.is_pressed("e"):
                 print(f">Current Price:{currentPrc.text}")
                 print("Keyboard Interrupt detected, exiting program...")
                 exit()
     else:
         for i in range(int(returnIter)*2):
-            try:
-                currentPrc = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[3]/div[1]/div/fin-streamer[1]")
-                print(f">Current Price:{currentPrc.text}", end="\r")
-                time.sleep(0.50)
-            except KeyboardInterrupt:
+            currentPrc = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[3]/div[1]/div/fin-streamer[1]")
+            print(f">Current Price:{currentPrc.text}", end="\r")
+            time.sleep(0.50)
+            if keyboard.is_pressed("e"):
                 print(f">Current Price:{currentPrc.text}")
                 print("Keyboard Interrupt detected, exiting program...")
                 exit()
