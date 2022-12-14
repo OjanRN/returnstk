@@ -28,15 +28,34 @@ def simType(element,text):
         element.send_keys(char)
         time.sleep(0.05)
 
+def argdiff():
+    global tickerName
+    global returnIter
+    returnIter = 0
+    tickerName = "N/A"
+    for args in range(len(sys.argv)):
+        if sys.argv[args] == "-s":
+            if sys.argv[args + 1].isupper():
+                tickerName= sys.argv[args + 1]
+                print(f"tickername set to {tickerName}")
+                args += 1
+            else:
+                print("[LOG] Please enter ticker symbol in uppercase")
+        if sys.argv[args] == "-p":
+            if sys.argv[args + 1].isnumeric():
+                returnIter = sys.argv[args + 1]
+                print(f"iterate = {returnIter}")
+            else:
+                print("[LOG] Please enter the period")
+    if tickerName == "N/A":
+        print("[LOG] please enter a ticker symbol")
+        exit()
+
 def main():
     if len(sys.argv) == 1:
-        print("[LOG] No arguments detected, please enter an argument")
+        print("[LOG] No keyword arguments detected, please enter an argument")
         exit()
-    if sys.argv[1].isupper() == True:
-        tickerName = sys.argv[1]
-    else:
-        print(f"[LOG] Please enter ticker symbol with uppercase: {sys.argv[1]}")
-        exit()
+    argdiff()
     print("")
     driver = get_driver()
     time.sleep(0.5)
@@ -59,12 +78,27 @@ def main():
         pass
     time.sleep(1)
     print("")
-    while True:
-        try:
-            currentPrc = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[3]/div[1]/div/fin-streamer[1]")
-            print(f">Current Price:{currentPrc.text}", end="\r")
-            time.sleep(0.25)
-        except KeyboardInterrupt:
-            print("Keyboard Interrupt detected, exiting program...")
+    if int(returnIter) == 0:
+        while True:
+            try:
+                currentPrc = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[3]/div[1]/div/fin-streamer[1]")
+                print(f">Current Price:{currentPrc.text}", end="\r")
+                time.sleep(0.50)
+            except KeyboardInterrupt:
+                print(f">Current Price:{currentPrc.text}")
+                print("Keyboard Interrupt detected, exiting program...")
+                exit()
+    else:
+        for i in range(int(returnIter)*2):
+            try:
+                currentPrc = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[3]/div[1]/div/fin-streamer[1]")
+                print(f">Current Price:{currentPrc.text}", end="\r")
+                time.sleep(0.50)
+            except KeyboardInterrupt:
+                print(f">Current Price:{currentPrc.text}")
+                print("Keyboard Interrupt detected, exiting program...")
+                exit()
+        print(f">Current Price:{currentPrc.text}")
+        print(f"program exited from iterating for {returnIter} seconds")
 
 print(main())
