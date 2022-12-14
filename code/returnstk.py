@@ -5,6 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from datetime import datetime as dt
 import time
+import sys
 
 def get_driver():
     options = webdriver.ChromeOptions()
@@ -28,7 +29,14 @@ def simType(element,text):
         time.sleep(0.05)
 
 def main():
-    tickerName = input("Ticker Symbol? ")
+    if len(sys.argv) == 1:
+        print("[LOG] No arguments detected, please enter an argument")
+        exit()
+    if sys.argv[1].isupper() == True:
+        tickerName = sys.argv[1]
+    else:
+        print(f"[LOG] Please enter ticker symbol with uppercase: {sys.argv[1]}")
+        exit()
     print("")
     driver = get_driver()
     time.sleep(0.5)
