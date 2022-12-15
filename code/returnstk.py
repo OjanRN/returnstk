@@ -9,14 +9,16 @@ import keyboard
 import sys
 
 helpText = '''
----------------
-Help > -h / --help > -h / --help
-Ticker Symbol > -s <Ticker Symbol> / --symbol
-Period(seconds) > -p <seconds> / --period
-Save Option > -sv (0 = No, 1= Yes) / --save
-
-Example usage: <executable> -h, <executable> -s ****
----------------
++-----+----------+-----------------+------------------+
+|FLAG | SYNONYM  | DESCRIPTION     | DEFAULT VALUE    |
+|-h   | --help   | Help            |                  |
+|-s   | --symbol | Ticker Symbol   | Unknown          |
+|-p   | --period | Period(Seconds) | 0(Infinite)      |
+|-sv  | --save   | Save File       | 0(Not Saved)     |
++-----+----------+-----------------+------------------+
+|                                                     |
+|Example usage: <executable> -h, <executable> -s **** |
++-----------------------------------------------------+
 '''
 
 def get_driver():
