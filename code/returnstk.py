@@ -11,8 +11,9 @@ import sys
 helpText = '''
 ---------------
 Help > -h / --help > -h / --help
-Ticker Symbol > -s <Ticker Symbol> / --symbol <Ticker Symbol>
-Period(seconds) > -p <seconds> / --period <seconds>
+Ticker Symbol > -s <Ticker Symbol> / --symbol
+Period(seconds) > -p <seconds> / --period
+Save Option > -sv (0 = No, 1= Yes) / --save
 
 Example usage: <executable> -h, <executable> -s ****
 ---------------
@@ -39,16 +40,29 @@ def simType(element,text):
         element.send_keys(char)
         time.sleep(0.05)
 
+def createf():
+    filename = f"{dt.now().strftime('%Y-%m-%d-%H')}.txt"
+    with open(filename, 'w') as file:
+        file.write(f"DATA RECORDED AT: {dt.now().strftime('%Y-%m-%d-%H-%M-%S')}\n")
+        file.close()
+
+def writeln(text):
+    filename = f"{dt.now().strftime('%Y-%m-%d-%H')}.txt"
+    with open(filename, 'a') as file:
+        file.write(text)
+        file.close()        
+
 def argdiff():
     global tickerName
     global returnIter
+    global saveOpt
+    saveOpt = 0
     returnIter = 0
     tickerName = "N/A"
     for args in range(len(sys.argv)):
         if sys.argv[args] in ["-s", "--symbol"]:
             if sys.argv[args + 1].isupper():
                 tickerName= sys.argv[args + 1]
-                print(f"tickername set to {tickerName}")
                 args += 1
             else:
                 print("[LOG] Please enter ticker symbol in uppercase")
@@ -58,6 +72,12 @@ def argdiff():
                 print(f"iterate = {returnIter}")
             else:
                 print("[LOG] Please enter the period")
+        if sys.argv[args] in ["-sv","--save"]:
+            if int(sys.argv[args + 1]) < 2:
+                saveOpt = sys.argv[args + 1]
+            else:
+                print("Please enter a valid save option: 0 or 1")
+            print("h")
         if sys.argv[args] in ["-h","--help"]:
             print(helpText)
             exit()
@@ -65,33 +85,7 @@ def argdiff():
         print("[LOG] please enter a ticker symbol")
         exit()
 
-def main():
-    if len(sys.argv) == 1:
-        print("[LOG] No keyword arguments detected, please enter an argument")
-        exit()
-    argdiff()
-    print("")
-    driver = get_driver()
-    time.sleep(0.5)
-    searchBar = driver.find_element(by="id", value="yfin-usr-qry")
-    marketStatus = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[4]/div/div/div/div[1]/div/div/span")
-    print(f"[LOG]: {marketStatus.text} > {dt.now().strftime('%H-%M-%S')}")
-    print(f"[LOG]: searching ticker > {dt.now().strftime('%H-%M-%S')}")
-    simType(searchBar, tickerName)
-    time.sleep(1)
-    print(f"[LOG]: accessing stock page > {dt.now().strftime('%H-%M-%S')}")
-    driver.find_element(by="id", value="result-quotes-0").click()
-    print(f"[LOG]: getting price information > {dt.now().strftime('%H-%M-%S')}")
-    company = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[2]/div[1]/div[1]/h1")
-    print(f"[LOG]: showing information for: {company.text}")
-    time.sleep(2)
-    try:
-        blockmsg = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[4]/div/div/div[1]/div/div/div/div/div/section/button[1]")
-        blockmsg.click()
-    except:
-        pass
-    time.sleep(1)
-    print("")
+def priceStreamer():
     if int(returnIter) == 0:
         while True:
             currentPrc = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[3]/div[1]/div/fin-streamer[1]")
@@ -113,5 +107,61 @@ def main():
         print(f">Current Price:{currentPrc.text}")
         print(f"program exited from iterating for {returnIter} seconds")
         exit()
+
+def main():
+    if len(sys.argv) == 1:
+        print("[LOG] No keyword arguments detected, please enter an argument")
+        exit()
+    argdiff()
+    print("")
+    global driver 
+    driver = get_driver()
+    time.sleep(0.5)
+    searchBar = driver.find_element(by="id", value="yfin-usr-qry")
+    marketStatus = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[4]/div/div/div/div[1]/div/div/span")
+    print(f"[LOG]: {marketStatus.text} > {dt.now().strftime('%H-%M-%S')}")
+    print(f"[LOG]: searching ticker > {dt.now().strftime('%H-%M-%S')}")
+    simType(searchBar, tickerName)
+    time.sleep(1)
+    print(f"[LOG]: accessing stock page > {dt.now().strftime('%H-%M-%S')}")
+    driver.find_element(by="id", value="result-quotes-0").click()
+    print(f"[LOG]: getting price information > {dt.now().strftime('%H-%M-%S')}")
+    company = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[2]/div[1]/div[1]/h1")
+    print(f"[LOG]: showing information for: {company.text}")
+    time.sleep(2)
+    try:
+        blockmsg = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[4]/div/div/div[1]/div/div/div/div/div/section/button[1]")
+        blockmsg.click()
+    except:
+        pass
+    time.sleep(1)
+    print("")
+    if saveOpt == "1":
+        createf()
+        if int(returnIter) == 0:
+            while True:
+                currentPrc = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[3]/div[1]/div/fin-streamer[1]")
+                print(f">Current Price:{currentPrc.text}", end="\r")
+                writeln(f"{currentPrc.text} > {dt.now().strftime('%H-%M-%S')}\n")
+                time.sleep(0.50)
+                if keyboard.is_pressed("e"):
+                    print(f">Current Price:{currentPrc.text}")
+                    print("Keyboard Interrupt detected, exiting program...")
+                    exit()
+        else:
+            for i in range(int(returnIter)*2):
+                currentPrc = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[3]/div[1]/div/fin-streamer[1]")
+                print(f">Current Price:{currentPrc.text}", end="\r")
+                writeln(f"{currentPrc.text} > {dt.now().strftime('%H-%M-%S')}\n")
+                time.sleep(0.50)
+                if keyboard.is_pressed("e"):
+                    print(f">Current Price:{currentPrc.text}")
+                    print("Keyboard Interrupt detected, exiting program...")
+                    exit()
+            print(f">Current Price:{currentPrc.text}")
+            print(f"program exited from iterating for {returnIter} seconds")
+            exit()
+    else:
+        priceStreamer()
 
 print(main())
