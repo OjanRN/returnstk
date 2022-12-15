@@ -8,6 +8,16 @@ import time
 import keyboard
 import sys
 
+helpText = '''
+---------------
+Help > -h / --help > -h / --help
+Ticker Symbol > -s <Ticker Symbol> / --symbol <Ticker Symbol>
+Period(seconds) > -p <seconds> / --period <seconds>
+
+Example usage: <executable> -h, <executable> -s ****
+---------------
+'''
+
 def get_driver():
     options = webdriver.ChromeOptions()
     options.add_argument("headless")
@@ -35,19 +45,22 @@ def argdiff():
     returnIter = 0
     tickerName = "N/A"
     for args in range(len(sys.argv)):
-        if sys.argv[args] == "-s":
+        if sys.argv[args] in ["-s", "--symbol"]:
             if sys.argv[args + 1].isupper():
                 tickerName= sys.argv[args + 1]
                 print(f"tickername set to {tickerName}")
                 args += 1
             else:
                 print("[LOG] Please enter ticker symbol in uppercase")
-        if sys.argv[args] == "-p":
+        if sys.argv[args] in ["-p","--period"]:
             if sys.argv[args + 1].isnumeric():
                 returnIter = sys.argv[args + 1]
                 print(f"iterate = {returnIter}")
             else:
                 print("[LOG] Please enter the period")
+        if sys.argv[args] in ["-h","--help"]:
+            print(helpText)
+            exit()
     if tickerName == "N/A":
         print("[LOG] please enter a ticker symbol")
         exit()
@@ -99,5 +112,6 @@ def main():
                 exit()
         print(f">Current Price:{currentPrc.text}")
         print(f"program exited from iterating for {returnIter} seconds")
+        exit()
 
 print(main())
