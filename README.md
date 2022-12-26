@@ -1,7 +1,7 @@
 
 # Return Stk(Stock)
 
-A real time stock scraper coded in Python and Nuitka
+A real time stock streamer coded in Python and Nuitka
 
 
 ## Authors
