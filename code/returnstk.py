@@ -8,6 +8,14 @@ import time
 import keyboard
 import sys
 
+welcomeText = """
+           _                        _   _    
+  _ __ ___| |_ _   _ _ __ _ __  ___| |_| | __
+ | '__/ _ \ __| | | | '__| '_ \/ __| __| |/ /
+ | | |  __/ |_| |_| | |  | | | \__ \ |_|   < 
+ |_|  \___|\__|\__,_|_|  |_| |_|___/\__|_|\_\                                              
+"""
+
 helpText = '''
 +-----+----------+-----------------+------------------+
 |FLAG | SYNONYM  | DESCRIPTION     | DEFAULT VALUE    |
@@ -115,20 +123,25 @@ def main():
         print("[LOG] No keyword arguments detected, please enter an argument")
         exit()
     argdiff()
-    print("")
-    global driver 
+    global driver
+    global company 
+    print(welcomeText)
+    print(f"[LOG] starting returnstk at {dt.now().strftime('%H-%M-%S')}")
     driver = get_driver()
     time.sleep(0.5)
-    searchBar = driver.find_element(by="id", value="yfin-usr-qry")
-    marketStatus = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[4]/div/div/div/div[1]/div/div/span")
-    print(f"[LOG]: {marketStatus.text} > {dt.now().strftime('%H-%M-%S')}")
-    print(f"[LOG]: searching ticker > {dt.now().strftime('%H-%M-%S')}")
-    simType(searchBar, tickerName)
-    time.sleep(1)
-    print(f"[LOG]: accessing stock page > {dt.now().strftime('%H-%M-%S')}")
-    driver.find_element(by="id", value="result-quotes-0").click()
-    print(f"[LOG]: getting price information > {dt.now().strftime('%H-%M-%S')}")
-    company = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[2]/div[1]/div[1]/h1")
+    try:
+        searchBar = driver.find_element(by="id", value="yfin-usr-qry")
+        marketStatus = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[4]/div/div/div/div[1]/div/div/span")
+        print(f"[LOG]: {marketStatus.text} > {dt.now().strftime('%H-%M-%S')}")
+        print(f"[LOG]: searching ticker > {dt.now().strftime('%H-%M-%S')}")
+        simType(searchBar, tickerName)
+        time.sleep(1)
+        print(f"[LOG]: accessing stock page > {dt.now().strftime('%H-%M-%S')}")
+        driver.find_element(by="id", value="result-quotes-0").click()
+        print(f"[LOG]: getting price information > {dt.now().strftime('%H-%M-%S')}")
+        company = driver.find_element(by="xpath", value="/html/body/div[1]/div/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div[2]/div[1]/div[1]/h1")
+    except:
+        print(f"[LOG] error occured > {dt.now().strftime('%H-%M-%S')}")
     print(f"[LOG]: showing information for: {company.text}")
     time.sleep(2)
     try:
